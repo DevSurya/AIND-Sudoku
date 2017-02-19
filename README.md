@@ -3,13 +3,25 @@
 
 # Question 1 (Naked Twins)
 Q: How do we use constraint propagation to solve the naked twins problem?  
-A: The local constraint of the naked twins (only two allowed values in two boxes) is propagated to all the other boxes
-in the unit.
+A: The naked twins problem is as follows: If two boxes inside a unit both have 
+the same two possible values, all the other boxes inside that unit cannot have 
+these two values.
+
+This allows us to remove additional possible values from the problem and reduce
+the search space.
+
+This constraint is propagated on every puzzle reduce step to all the units, 
+similar to the elimination and only choice constraint.
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
-A: In this case, the additional constraint is introduced by adding a new unit, in which the values must be unique. This
-constraint is again propagated by using the elimination and other techniques to the other units.
+A: A diagonal sudoku introduces two new units to the puzzle: both diagonals. 
+
+We can now use the same constraint propagation techniques on the diagonals as we did 
+on the rows, columns and boxes.
+
+So on each puzzle reduce step, we will also run the elimination, only choice and naked
+twins steps on the diagonals.
 
 ### Install
 
