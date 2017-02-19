@@ -8,7 +8,8 @@ in the unit.
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
-A: *Student should provide answer here*
+A: In this case, the additional constraint is introduced by adding a new unit, in which the values must be unique. This
+constraint is again propagated by using the elimination and other techniques to the other units.
 
 ### Install
 
