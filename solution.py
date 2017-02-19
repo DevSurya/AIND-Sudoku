@@ -14,8 +14,12 @@ boxes = cross(rows, cols)
 row_units = [cross(r, cols) for r in rows]
 column_units = [cross(rows, c) for c in cols]
 square_units = [cross(rs, cs) for rs in ('ABC', 'DEF', 'GHI') for cs in ('123', '456', '789')]
+
+# For the diagonal Sudoku, we add two additional units: the two diagonals
 diagonal_units = [[r + c for (r,c) in zip(rows,cols)], [r + c for (r,c) in zip(rows[::-1],cols)]]
 
+# This is really the only change needed to go from a "normal" Sudoku to a diagonal one
+# All other functions will use this unit list to check the constraints, so they will automatically include the diagonal units
 unitlist = row_units + column_units + square_units + diagonal_units
 units = dict((s, [u for u in unitlist if s in u]) for s in boxes)
 peers = dict((s, set(sum(units[s], [])) - {s}) for s in boxes)
@@ -38,17 +42,19 @@ def naked_twins(values):
     Returns:
         the values dictionary with the naked twins eliminated from peers.
     """
-    # Find all instances of naked twins
+    # The function tries to find naked twins in each unit
     for unit in unitlist:
+        # this dict of lists will store the boxes for which values of two numbers exists
         boxes_with_two_values = defaultdict(list)
         for box in unit:
             if len(values[box]) == 2:
                 boxes_with_two_values[values[box]].append(box)
+        # now we check in the lists if there are lists with exactly two boxes. Those are the naked twins
         for value, boxes in boxes_with_two_values.items():
-            # Eliminate the naked twins as possibilities for their peers
             if len(boxes) == 2:
                 for box in unit:
                     if box not in boxes:
+                        # finally we eliminate the nakes twins' values for the other boxes in the unit
                         assign_value(values, box, values[box].replace(value[0], '').replace(value[1], ''))
     return values
 
@@ -144,7 +150,6 @@ def solve(grid):
 
 if __name__ == '__main__':
     diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
-    # diag_sudoku_grid = '4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......'
     display(solve(diag_sudoku_grid))
 
     try:
